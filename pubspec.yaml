@@ -3,7 +3,7 @@ description: "Combining Navigator with Deep Links (Android) and Universal Links 
 homepage: https://github.com/ngominhtrungit
 issue_tracker: https://github.com/ngominhtrungit/flutter_link_nav/issues
 
-version: 1.0.1
+version: 1.0.1+1
 
 environment:
   sdk: '>=3.4.4 <4.0.0'

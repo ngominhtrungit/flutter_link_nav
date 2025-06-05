@@ -36,9 +36,19 @@ Combining Navigator with Deep Links (Android) and Universal Links (iOS) in Flutt
 
 ## How to use
 1. First example have 2 screens: `HomeScreen` and `DetailScreen`.
+   - In `HomeScreen`, because I want every navigate to `another screen` after start from `HomeScreen` to be handled by deep link, I will call `DeepLinkHandler().init(context)` in `initState()`.
 ```
 class HomeScreen extends StatefulWidget {
   static const String routeName = "home_screen";
+  ...
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    DeepLinkHandler().init(context);
+  }
   ...
 }
 
