@@ -3,6 +3,7 @@
 Combining Navigator with Deep Links (Android) and Universal Links (iOS) in Flutter
 
 ## How to config
+### First, example config with schema `example.vn`:
 ### Android
 1. Add the following to your `AndroidManifest.xml` file:
 
@@ -107,17 +108,21 @@ class MyApp extends StatelessWidget {
 1. For Android, you can use the `adb` command to test deep links:
 ```
 adb shell am start -W -a android.intent.action.VIEW -d [deeplink] [package_name]
+
 # Example command to test deep link
 adb shell am start -W -a android.intent.action.VIEW -d "example.vn/detail_screen" com.example.example
-# Example command to test deep link with query params
+
+# With query params
 adb shell am start -W -a android.intent.action.VIEW -d "example.vn/detail_screen?param1=value1&param2=value2" com.example.example
 ```
 
 2. For iOS, you can use the `xcrun` command to test universal links:
 ```
 xcrun simctl openurl [device_id] [universal link]
+
 # Example command to test universal link
 xcrun simctl openurl 3ACB75D6-C7A4-4BDD-A6E4-AE17C8773949 example.vn://test_screen
-# Example command to test universal link with query params
+
+# With query params
 xcrun simctl openurl 3ACB75D6-C7A4-4BDD-A6E4-AE17C8773949 example.vn://test_screen?param1=value1&param2=value2
 ```

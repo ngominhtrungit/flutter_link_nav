@@ -1,4 +1,9 @@
-##1.0.1+1
+## 1.0.2
+
+- Update exactly support flatforms: Android, iOS.
+- Optimize code.
+
+## 1.0.1+1
 
 - Add example how to use `DeepLinkHandler` in README.md.
 
