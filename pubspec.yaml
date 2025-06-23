@@ -3,7 +3,7 @@ description: "Combining Navigator with Deep Links (Android) and Universal Links 
 homepage: https://github.com/ngominhtrungit
 issue_tracker: https://github.com/ngominhtrungit/flutter_link_nav/issues
 
-version: 1.0.1+1
+version: 1.0.2
 
 environment:
   sdk: '>=3.4.4 <4.0.0'
@@ -11,8 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-  cupertino_icons: ^1.0.6
   app_links: ^6.4.0
 
 dev_dependencies:
@@ -26,3 +24,7 @@ flutter:
     androidX: true
     androidPackage: com.example.flutter_link_nav
     iosBundleIdentifier: com.example.flutterLinkNav
+
+platforms:
+  android:
+  ios:
