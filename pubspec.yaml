@@ -1,9 +1,10 @@
 name: flutter_link_nav
 description: "Combining Navigator with Deep Links (Android) and Universal Links (iOS) in Flutter"
 homepage: https://github.com/ngominhtrungit
+repository: https://github.com/ngominhtrungit/flutter_link_nav
 issue_tracker: https://github.com/ngominhtrungit/flutter_link_nav/issues
 
-version: 1.0.2
+version: 1.0.3
 
 environment:
   sdk: '>=3.4.4 <4.0.0'
