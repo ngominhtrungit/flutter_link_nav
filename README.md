@@ -36,19 +36,25 @@ Combining Navigator with Deep Links (Android) and Universal Links (iOS) in Flutt
 ```
 
 ## How to use
-1. First example have 2 screens: `HomeScreen` and `DetailScreen`.
-   - In `HomeScreen`, because I want every navigate to `another screen` after start from `HomeScreen` to be handled by deep link, I will call `DeepLinkHandler().init(context)` in `initState()`.
+1. First example have 2 screens: `MainScreen` and `DetailScreen`.
+   - In `MainScreen`, because I want every navigate to `another screen` after start from `MainScreen` to be handled by deep link, I will call `DeepLinkHandler().init(context)` in `initState()`.
 ```
-class HomeScreen extends StatefulWidget {
-  static const String routeName = "home_screen";
+class MainScreen extends StatefulWidget {
+  static const String routeName = "main_screen";
   ...
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+     /// option 1: use the default deep link handler
     DeepLinkHandler().init(context);
+    /// option 2: use a custom deep link handler
+    // DeepLinkHandler().init(context, customHandler: (context, uri) {
+    //   // Custom deep link handling logic can be added here
+    //   debugPrint('MainScreen Custom deep link handler: $uri');
+    // });
   }
   ...
 }
@@ -64,13 +70,13 @@ class DetailScreen extends StatelessWidget {
 import 'package:flutter_link_nav/flutter_link_nav.dart';
 
 class ExampleAppRoutes extends AppRoutes {
-  static const String homeScreen = HomeScreen.routeName;
+  static const String mainScreen = MainScreen.routeName;
   static const String detailScreen = DetailScreen.routeName;
 
   @override
   Map<String, RouteConfig> get routes => {
-        homeScreen: RouteConfig(
-          builder: (queryParams, fromSource) => const HomeScreen(),
+        mainScreen: RouteConfig(
+          builder: (queryParams, fromSource) => const MainScreen(),
         ),
         detailScreen: RouteConfig(
           builder: (queryParams, fromSource) => const DetailScreen(),
@@ -97,7 +103,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      initialRoute: ExampleAppRoutes.mainRouteName,
+      initialRoute: ExampleAppRoutes.mainScreen,
       onGenerateRoute: AppRoutes.generateRoute,
     );
   }
@@ -105,7 +111,15 @@ class MyApp extends StatelessWidget {
 ```
 
 ## How to test
-1. For Android, you can use the `adb` command to test deep links:
+1. Navigate into app:
+```
+Navigator.pushNamed(context, [screen_name]);
+
+example:
+Navigator.pushNamed(context, ExampleAppRoutes.detailScreen);
+```
+
+2. For Android, you can use the `adb` command to test deep links:
 ```
 adb shell am start -W -a android.intent.action.VIEW -d [deeplink] [package_name]
 
@@ -116,13 +130,13 @@ adb shell am start -W -a android.intent.action.VIEW -d "example.vn/detail_screen
 adb shell am start -W -a android.intent.action.VIEW -d "example.vn/detail_screen?param1=value1&param2=value2" com.example.example
 ```
 
-2. For iOS, you can use the `xcrun` command to test universal links:
+3. For iOS, you can use the `xcrun` command to test universal links:
 ```
 xcrun simctl openurl [device_id] [universal link]
 
 # Example command to test universal link
-xcrun simctl openurl 3ACB75D6-C7A4-4BDD-A6E4-AE17C8773949 example.vn://test_screen
+xcrun simctl openurl 55331C47-EDBD-439A-B098-34A9382F3A83 "example.vn://detail_screen"
 
 # With query params
-xcrun simctl openurl 3ACB75D6-C7A4-4BDD-A6E4-AE17C8773949 example.vn://test_screen?param1=value1&param2=value2
+xcrun simctl openurl 3ACB75D6-C7A4-4BDD-A6E4-AE17C8773949 example.vn://detail_screen?param1=value1&param2=value2
 ```
