@@ -1,3 +1,7 @@
+## 1.0.4
+- Add example in platform macOS.
+- optimize code.
+- Update README.md.
 ## 1.0.3
 - Add example, how to use `DeepLinkHandler` in README.md.
 ## 1.0.2

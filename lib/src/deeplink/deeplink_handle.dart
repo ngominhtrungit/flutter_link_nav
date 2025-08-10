@@ -29,12 +29,16 @@ class DeepLinkHandler {
     _customHandler = customHandler;
 
     _listener.uriLinkStream.listen(
-      (uri) => _handleDeepLink(context, uri),
+      (uri) {
+        if (!context.mounted) return;
+        _handleDeepLink(context, uri);
+      },
       onError: (error) => debugPrint('Error receiving link: $error'),
       cancelOnError: false,
     );
 
     _listener.getInitialLink().then((uri) {
+      if (!context.mounted) return;
       if (uri != null) _handleDeepLink(context, uri);
     });
   }
