@@ -1,6 +1,6 @@
 # flutter_link_nav
 
-Combining Navigator with Deep Links (Android) and Universal Links (iOS) in Flutter
+Combining Navigator with Deep Links (Android), Universal Links (iOS, macOS) in Flutter
 
 ## How to config
 ### First, example config with schema `example.vn`:
@@ -16,7 +16,7 @@ Combining Navigator with Deep Links (Android) and Universal Links (iOS) in Flutt
         <data android:scheme="example.vn" />
     </intent-filter>
 ```
-### iOS
+### iOS, Macos
 1. Add the following to your `Info.plist` file:
 
 ```
@@ -139,4 +139,12 @@ xcrun simctl openurl 55331C47-EDBD-439A-B098-34A9382F3A83 "example.vn://detail_s
 
 # With query params
 xcrun simctl openurl 3ACB75D6-C7A4-4BDD-A6E4-AE17C8773949 example.vn://detail_screen?param1=value1&param2=value2
+```
+4. For macOS, you can use the `open` command to test universal links:
+```
+open "example.vn://[route_name]"
+
+open "example.vn://detail_screen"
+# With query params
+open "example.vn://detail_screen?param1=value1&param2=value2"
 ```
