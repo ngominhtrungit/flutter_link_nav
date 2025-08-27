@@ -1,5 +1,5 @@
 PODS:
-  - app_links (1.0.0):
+  - app_links (6.4.1):
     - FlutterMacOS
   - FlutterMacOS (1.0.0)
 
@@ -14,7 +14,7 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral
 
 SPEC CHECKSUMS:
-  app_links: afe860c55c7ef176cea7fb630a2b7d7736de591d
+  app_links: 05a6ec2341985eb05e9f97dc63f5837c39895c3f
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
 
 PODFILE CHECKSUM: 7eb978b976557c8c1cd717d8185ec483fd090a82

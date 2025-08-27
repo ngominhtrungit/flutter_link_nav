@@ -5,7 +5,7 @@ repository: https://github.com/ngominhtrungit/flutter_link_nav
 issue_tracker: https://github.com/ngominhtrungit/flutter_link_nav/issues
 topics: [deeplink, navigator, universal-links]
 
-version: 2.0.0
+version: 3.0.0
 
 environment:
   sdk: '>=3.4.4 <4.0.0'

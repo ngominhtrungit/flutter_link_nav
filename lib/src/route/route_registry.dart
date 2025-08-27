@@ -1,35 +1,45 @@
 import 'package:flutter/material.dart';
 
-typedef RouteWidget = Widget? Function(dynamic queryParams, String? fromSource);
+typedef RouteHandler<T> = T Function(dynamic queryParams);
+
+typedef RouteWidget = RouteHandler<Widget?>;
+typedef RouteAction = RouteHandler<void>;
+
+class RouteConfig {
+  final RouteWidget? widgetRegister;
+  final RouteAction? actionRegister;
+
+  const RouteConfig({this.widgetRegister, this.actionRegister});
+}
 
 class RouteRegistry {
-  static final Map<String, RouteWidget> _handlers = {};
+  static final Map<String, RouteConfig> _routes = {};
 
   ///
-  /// This [register] function is supported to register a route handler for a specific route.
+  /// Register a unified route configuration with both widget and action handlers
   ///
   /// example:
+  /// RouteRegistry.registerRoute('home', RouteConfig(
+  ///   widgetRegister: (queryParams) => HomeScreen(),
+  ///   actionRegister: (queryParams) async => print('Home accessed')
+  /// ));
   ///
-  /// 'home': (queryParams, fromSource) => HomeScreen()
-  ///
-  /// 'profile': (queryParams, fromSource) => ProfileScreen(userId: queryParams['id'])
-  ///
-  static void register(String route, RouteWidget handler) {
-    _handlers[route] = handler;
+  static void registerRoute(String route, RouteConfig config) {
+    _routes[route] = config;
   }
 
   ///
-  /// This [getWidget] function is supported to [get] the widget for a specific [route].
+  /// Get route configuration for a specific route
   ///
   /// example:
   ///
-  /// RouteRegistry.getWidget('home') => return [HomeScreen] had registered before
+  /// RouteRegistry.getRouteConfig('home') => return [HomeScreen] had registered before
   ///
-  static Widget? getWidget(
-    String route, {
-    dynamic queryParams,
-    String? fromSource,
-  }) {
-    return _handlers[route]?.call(queryParams, fromSource);
+  /// or show bottom sheet
+  ///
+  /// RouteRegistry.getRouteConfig('showBottomSheet') => return action to show bottom sheet
+  ///
+  static RouteConfig? getRouteConfig(String route) {
+    return _routes[route];
   }
 }

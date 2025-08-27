@@ -1,3 +1,11 @@
+## 3.0.0
+- **BREAKING CHANGE**: Simplified `RouteHandler` signature by removing `fromSource` parameter.
+  - **Migration**: Update your route handlers from `(queryParams, fromSource) => Widget()` to `(queryParams) => Widget()`.
+  - The `fromSource` parameter was redundant as all information can be passed through `queryParams`.
+- **NEW FEATURE**: Added `actionRegister` support for executing actions without navigation.
+  - Routes can now have both `widgetRegister` (for UI) and `actionRegister` (for actions like showBottomSheet, showDialog, etc.).
+  - Deep links with only `actionRegister` will execute the action directly without attempting navigation.
+
 ## 2.0.0
 - **BREAKING CHANGE**: Changed `builder` parameter to `widgetRegister` in `RouteConfig`.
   - **Migration**: Replace `builder: (queryParams, fromSource) => YourWidget()` with `widgetRegister: (queryParams, fromSource) => YourWidget()` in your route configurations.
