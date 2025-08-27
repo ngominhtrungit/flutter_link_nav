@@ -9,11 +9,11 @@ class ExampleAppRoutes extends AppRoutes {
 
   @override
   Map<String, RouteConfig> get routes => {
-    MainScreen.routeName: RouteConfig(
-      builder: (queryParams, fromSource) => const MainScreen(),
+    mainScreen: RouteConfig(
+      widgetRegister: (queryParams, fromSource) => const MainScreen(),
     ),
-    DetailScreen.routeName: RouteConfig(
-      builder: (queryParams, fromSource) => const DetailScreen(),
+    detailScreen: RouteConfig(
+      widgetRegister: (queryParams, fromSource) => const DetailScreen(),
     ),
   };
 }
