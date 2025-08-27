@@ -67,31 +67,42 @@ class DetailScreen extends StatelessWidget {
 2. Then, create implementation of `AppRoutes`:
 
 ```
-import 'package:flutter_link_nav/flutter_link_nav.dart';
-
 class ExampleAppRoutes extends AppRoutes {
   static const String mainScreen = MainScreen.routeName;
   static const String detailScreen = DetailScreen.routeName;
 
   @override
   Map<String, RouteConfig> get routes => {
-        mainScreen: RouteConfig(
-          widgetRegister: (queryParams, fromSource) => const MainScreen(),
-        ),
-        detailScreen: RouteConfig(
-          widgetRegister: (queryParams, fromSource) => const DetailScreen(),
-        ),
-      };
+    mainScreen: RouteConfig(
+      widgetRegister: (queryParams) => const MainScreen(),
+    ),
+    detailScreen: RouteConfig(
+      widgetRegister: (queryParams) => const DetailScreen(),
+    ),
+    'sheet': RouteConfig(
+      actionRegister: (query) async {
+        await showDialog(
+          context: globalNavigatorKey.currentContext!,
+          builder: (context) => AlertDialog(
+            title: const Text('Deep Link Detected'),
+            content: Text(query['label'] ?? ''),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      },
+    ),
+  };
 }
 ```
 3. Finally, setup in `main.dart`:
 
 ```
-import 'package:flutter/material.dart';
-import 'package:flutter_link_nav/flutter_link_nav.dart';
-
-import 'app_routes.dart';
-
+final globalNavigatorKey = GlobalObjectKey<NavigatorState>('nav');
 void main() {
   ExampleAppRoutes().registerRoutes();
   runApp(const MyApp());
@@ -102,7 +113,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      navigatorKey: globalNavigatorKey,
       initialRoute: ExampleAppRoutes.mainScreen,
       onGenerateRoute: AppRoutes.generateRoute,
     );
@@ -147,4 +159,12 @@ open "example.vn://[route_name]"
 open "example.vn://detail_screen"
 # With query params
 open "example.vn://detail_screen?param1=value1&param2=value2"
+```
+5. Additional case:
+```
+# Don't use `routename` in actionRegister with Navigator
+  Navigator.pushNamed(context, 'routeName')
+# instead, use:
+  AppRoutes.executeRouteAction('routeName', arguments: {...});
+
 ```

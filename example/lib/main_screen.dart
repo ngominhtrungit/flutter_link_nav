@@ -45,6 +45,16 @@ class _MainScreenState extends State<MainScreen> {
               },
               child: const Text('Go to Detail Screen'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                AppRoutes.executeRouteAction(
+                  'sheet',
+                  arguments: {'label': 'Action executed from button'},
+                );
+                // Navigator.pushNamed(context, 'sheet', arguments:{'label': 'Action executed from button'}  );
+              },
+              child: const Text('Show Sheet (Action)'),
+            ),
           ],
         ),
       ),
