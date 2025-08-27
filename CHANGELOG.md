@@ -1,3 +1,10 @@
+## 2.0.0
+- **BREAKING CHANGE**: Changed `builder` parameter to `widgetRegister` in `RouteConfig`.
+  - **Migration**: Replace `builder: (queryParams, fromSource) => YourWidget()` with `widgetRegister: (queryParams, fromSource) => YourWidget()` in your route configurations.
+  - This change provides better naming consistency and clarity for widget registration in routes.
+- Describe the functions of the relevant function and class.
+- Upgrade library dependencies app_links.
+
 ## 1.0.4
 - Add example in platform macOS.
 - optimize code.

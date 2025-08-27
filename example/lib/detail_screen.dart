@@ -18,7 +18,10 @@ class DetailScreen extends StatelessWidget {
 
             ElevatedButton(
               onPressed: () {
-                Navigator.popUntil(context, (ModalRoute.withName(MainScreen.routeName)));
+                Navigator.popUntil(
+                  context,
+                  (ModalRoute.withName(MainScreen.routeName)),
+                );
               },
               child: Text('Go Back'),
             ),

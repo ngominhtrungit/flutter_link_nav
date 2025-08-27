@@ -3,8 +3,9 @@ description: "Combining Navigator with Deep Links (Android) and Universal Links 
 homepage: https://github.com/ngominhtrungit
 repository: https://github.com/ngominhtrungit/flutter_link_nav
 issue_tracker: https://github.com/ngominhtrungit/flutter_link_nav/issues
+topics: [deeplink, navigator, universal-links]
 
-version: 1.0.4
+version: 2.0.0
 
 environment:
   sdk: '>=3.4.4 <4.0.0'
@@ -12,7 +13,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  app_links: ^6.4.0
+  app_links: ^6.4.1
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +31,7 @@ platforms:
   android:
   ios:
   macos:
+
+screenshots:
+  - description: The flutter link nav package logo.
+    path: assets/logo.png

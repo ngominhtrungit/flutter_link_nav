@@ -1,6 +1,10 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 
+///
+/// This is class support listen deep link
+/// can be override to custom listen deep link
+///
 abstract class DeepLinkListener {
   void init(BuildContext context);
   Future<Uri?> getInitialLink();

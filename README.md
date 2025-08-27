@@ -16,7 +16,7 @@ Combining Navigator with Deep Links (Android), Universal Links (iOS, macOS) in F
         <data android:scheme="example.vn" />
     </intent-filter>
 ```
-### iOS, Macos
+### iOS, macOS
 1. Add the following to your `Info.plist` file:
 
 ```
@@ -76,10 +76,10 @@ class ExampleAppRoutes extends AppRoutes {
   @override
   Map<String, RouteConfig> get routes => {
         mainScreen: RouteConfig(
-          builder: (queryParams, fromSource) => const MainScreen(),
+          widgetRegister: (queryParams, fromSource) => const MainScreen(),
         ),
         detailScreen: RouteConfig(
-          builder: (queryParams, fromSource) => const DetailScreen(),
+          widgetRegister: (queryParams, fromSource) => const DetailScreen(),
         ),
       };
 }

@@ -15,8 +15,10 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+
     /// option 1: use the default deep link handler
     DeepLinkHandler().init(context);
+
     /// option 2: use a custom deep link handler
     // DeepLinkHandler().init(context, customHandler: (context, uri) {
     //   // Custom deep link handling logic can be added here
@@ -32,7 +34,10 @@ class _MainScreenState extends State<MainScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('This is the main screen.', style: TextStyle(fontSize: 24)),
+            const Text(
+              'This is the main screen.',
+              style: TextStyle(fontSize: 24),
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
