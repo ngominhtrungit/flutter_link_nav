@@ -1,3 +1,8 @@
+## 3.0.1
+- Added Tab Screen (multiple tabs) deep link handling example.
+- Highlighted required Input parameters (`getTabIndex`, `currentTabIndex`, `updateTabIndex`).
+- Clarified URI host vs path parsing for schemes like `example.vn://main_screen`.
+
 ## 3.0.0
 - **BREAKING CHANGE**: Simplified `RouteHandler` signature by removing `fromSource` parameter.
   - **Migration**: Update your route handlers from `(queryParams, fromSource) => Widget()` to `(queryParams) => Widget()`.

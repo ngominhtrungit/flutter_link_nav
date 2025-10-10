@@ -2,12 +2,43 @@ import 'package:flutter/material.dart';
 import 'route_registry.dart';
 
 abstract class AppRoutes {
+  // Global instance to store the current AppRoutes implementation
+  static AppRoutes? _instance;
+
+  // Getter to access the global instance
+  static AppRoutes? get instance => _instance;
+
+  // Method to set the global instance
+  static void setInstance(AppRoutes appRoutes) {
+    _instance = appRoutes;
+  }
+
   ///
   /// This place contains all the routes used in the application.
   ///
   Map<String, RouteConfig> get routes;
 
+  ///
+  /// This set contains routes that are based on tab navigation.
+  /// example: main screen contains 3 tabs screen: home, search, profile
+  ///
+  /// mapping with each tab screen <=> tab route
+  /// Case 1: example.vn://main?tab=search → Navigate to search tab
+  /// Case 2: example.vn://main?tab=profile → Navigate to profile tab
+  /// Case 3: example.vn://main → Reset to index 0
+  ///
+  Set<String>? get tabBasedRoutes;
+
+  bool isTabBasedRoute(String? route) {
+    return route != null &&
+        tabBasedRoutes != null &&
+        (tabBasedRoutes?.contains(route) ?? false);
+  }
+
   void registerRoutes() {
+    // Set this instance as the global instance when registering routes
+    AppRoutes.setInstance(this);
+
     routes.forEach((routeName, config) {
       RouteRegistry.registerRoute(
         routeName,

@@ -21,7 +21,7 @@ extension UriParser on Uri {
       path = '';
     }
 
-    Map<String, String> queryParams = queryParameters;
+    final Map<String, String> queryParams = queryParameters;
 
     return (deeplink: path, parameters: queryParams);
   }
