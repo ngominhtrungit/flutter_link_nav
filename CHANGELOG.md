@@ -1,3 +1,8 @@
+## 3.1.1
+- Refactored `NavigationExtension` to use unified URI parsing from `UriParser` extension.
+- Optimized deep link handling logic in `DeepLinkHandler`.
+- Internal code cleanup and improvements.
+
 ## 3.1.0
 - Upgrade `app_links` to `^7.0.0`.
 - Update Flutter environment compatibility for latest versions (Dart 3.5+).

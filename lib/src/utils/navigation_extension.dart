@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../route/app_routes.dart';
+import 'uri_ext.dart';
 
 /// Configuration class for tab navigation handling
 class TabNavigationConfig {
@@ -25,23 +26,20 @@ extension NavigationExtension on BuildContext {
   /// Parameters:
   /// - [uri]: The deep link URI to process
   /// - [config]: Tab navigation configuration (optional for tab-based navigation)
-  void handleNavigationOnTab(
+  /// Returns [bool] indicating if the navigation was handled as a tab switch
+  bool handleNavigationOnTab(
     Uri uri, {
     TabNavigationConfig? config,
   }) {
     final currentRoute = ModalRoute.of(this)?.settings.name;
 
-    // Parse path correctly from URI scheme like example.vn://main_screen
-    String path;
-    if (uri.scheme.isNotEmpty && uri.host.isNotEmpty) {
-      // For URIs like example.vn://main_screen
-      path = uri.host;
-    } else if (uri.path.isNotEmpty) {
-      // For URIs like /main_screen
-      path = uri.path.replaceFirst('/', '');
-    } else {
-      debugPrint('Invalid URI format: $uri');
-      return;
+    // Use the unified parseUri from uri_ext.dart
+    final parseResult = uri.parseUri();
+    final path = parseResult.deeplink;
+
+    if (path == null || path.isEmpty) {
+      debugPrint('Invalid URI format or empty path: $uri');
+      return false;
     }
 
     debugPrint('Current route: $currentRoute, Target path: $path');
@@ -52,7 +50,7 @@ extension NavigationExtension on BuildContext {
       if (appRoutesInstance == null) {
         debugPrint(
             'AppRoutes instance not found. Make sure to call registerRoutes() first.');
-        return;
+        return false;
       }
 
       final isTabBasedRoute =
@@ -71,7 +69,7 @@ extension NavigationExtension on BuildContext {
           if (newTabIndex != config.currentTabIndex) {
             config.updateTabIndex(newTabIndex);
           }
-          return;
+          return true;
         }
 
         // if no query parameters and same tab-based route => reset to index 0
@@ -80,7 +78,7 @@ extension NavigationExtension on BuildContext {
         if (config.currentTabIndex != 0) {
           config.updateTabIndex(0);
         }
-        return;
+        return true;
       }
     }
 
@@ -89,17 +87,18 @@ extension NavigationExtension on BuildContext {
       debugPrint(
           'Has query parameters, navigating to $path with params: ${uri.queryParameters}');
       Navigator.pushNamed(this, path, arguments: uri.queryParameters);
-      return;
+      return false;
     }
 
     // if same route and not query params => do nothing
     if (currentRoute == path) {
       debugPrint('Skip push route $path because it is current route');
-      return;
+      return false;
     }
 
     // Another case
     debugPrint('Navigating to different route: $path');
     Navigator.pushNamed(this, path);
+    return false;
   }
 }
