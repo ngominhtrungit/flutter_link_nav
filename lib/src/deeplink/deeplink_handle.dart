@@ -16,10 +16,15 @@ class DeepLinkHandler {
     DeepLinkListener? listener,
     DeepLinkProcessor? processor,
   }) {
-    _instance._listener = listener ?? AppLinksListener();
-    _instance._processor = processor ?? DefaultDeepLinkProcessor();
+    if (!_instance._isInitializedFields) {
+      _instance._listener = listener ?? AppLinksListener();
+      _instance._processor = processor ?? DefaultDeepLinkProcessor();
+      _instance._isInitializedFields = true;
+    }
     return _instance;
   }
+
+  bool _isInitializedFields = false;
 
   DeepLinkHandler._internal();
 
