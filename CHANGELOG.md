@@ -1,3 +1,8 @@
+## 3.1.0
+- Upgrade `app_links` to `^7.0.0`.
+- Update Flutter environment compatibility for latest versions (Dart 3.5+).
+- Internal optimizations for deep link handling.
+
 ## 3.0.1
 - Added Tab Screen (multiple tabs) deep link handling example.
 - Highlighted required Input parameters (`getTabIndex`, `currentTabIndex`, `updateTabIndex`).
