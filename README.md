@@ -1,6 +1,15 @@
 # flutter_link_nav
 
+<div align="center">
+
 > Seamlessly combine Flutter Navigator with Deep Links (Android) & Universal Links (iOS, macOS).
+
+[![Pub.dev](https://img.shields.io/pub/v/flutter_link_nav.svg?style=flat-square&logo=dart&logoColor=white)](https://pub.dev/packages/flutter_link_nav)
+[![GitHub stars](https://img.shields.io/github/stars/ngominhtrungit/flutter_link_nav?style=flat-square&logo=github)](https://github.com/ngominhtrungit/flutter_link_nav)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ngominhtrungit-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=000000)](https://buymeacoffee.com/ngominhtrungit)
+
+
+</div>
 
 ## Table of Contents
 1. Overview
@@ -191,7 +200,7 @@ Required Input Parameters (must provide all):
 - `getTabIndex(String? tabRoute) -> int` : Map route token to index.
 - `currentTabIndex` : Current selected tab index.
 - `updateTabIndex(int)` : Perform UI tab change.
-Examples:
+  Examples:
 - `example.vn://main?tab=search` → Switch to Search.
 - `example.vn://main?tab=profile` → Switch to Profile.
 - `example.vn://main` → Reset/stay Home.
@@ -244,3 +253,34 @@ flutter run -t example/lib/case_multiple_tab_screen/tab_screen.dart -d macos
 - Provide a built-in tab mapping helper.
 
 Enjoy building with deep links 🚀
+
+---
+
+<div align="center">
+
+### 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!  
+Feel free to check the [issues page](https://github.com/ngominhtrungit/flutter_link_nav/issues).
+
+### Show your support
+
+If you find this project useful and it helps you save time, please consider supporting it. Your support keeps me motivated to maintain and improve this package!
+
+<a href="https://www.buymeacoffee.com/ngominhtrungit" target="_blank" rel="noopener noreferrer">
+  <img
+    src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=ngominhtrungit&button_colour=FFDD00&font_colour=000000&font_family=Inter&outline_colour=000000&coffee_colour=000000"
+    alt="Buy Me a Coffee"
+    style="color: #000000;"
+  />
+</a>
+
+
+<br />
+
+Developed with ❤️ by **[Trung Ngo](https://github.com/ngominhtrungit)**
+
+[![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ngominhtrungit)
+[![Pub.dev](https://img.shields.io/pub/v/flutter_link_nav.svg?style=for-the-badge&logo=dart&logoColor=white)](https://pub.dev/packages/flutter_link_nav)
+
+</div>
