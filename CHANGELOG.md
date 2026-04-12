@@ -1,3 +1,7 @@
+## 3.1.2+1
+- Update example app with better tab navigation.
+- Update UI for README.md.
+
 ## 3.1.1
 - Refactored `NavigationExtension` to use unified URI parsing from `UriParser` extension.
 - Optimized deep link handling logic in `DeepLinkHandler`.
