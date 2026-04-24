@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../deeplink/deep_link_guard.dart';
 
 typedef RouteHandler<T> = T Function(dynamic queryParams);
 
@@ -8,8 +9,13 @@ typedef RouteAction = RouteHandler<void>;
 class RouteConfig {
   final RouteWidget? widgetRegister;
   final RouteAction? actionRegister;
+  final List<DeepLinkGuard>? guards;
 
-  const RouteConfig({this.widgetRegister, this.actionRegister});
+  const RouteConfig({
+    this.widgetRegister,
+    this.actionRegister,
+    this.guards,
+  });
 }
 
 class RouteRegistry {

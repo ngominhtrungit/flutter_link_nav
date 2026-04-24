@@ -35,8 +35,10 @@
 ## 2. Features
 - Global route registry (UI + action).
 - Initial link + link stream handling.
-- Custom deep link handler injection.
-- Tab navigation state sync via deep link events.
+- **Guard / Middleware**: Intercept navigation for Auth or logging.
+- **Typed Query Parsing**: Safe parameter extraction.
+- **Tab Navigation Mixin**: Simplified tab state synchronization.
+- **Error & Unknown Route Handling**: Global callbacks for failed links.
 - Null-safe & Flutter 3 compatible.
 
 ## 3. Quick Start
@@ -205,7 +207,74 @@ Required Input Parameters (must provide all):
 - `example.vn://main?tab=profile` → Switch to Profile.
 - `example.vn://main` → Reset/stay Home.
 
-## 8. Test Deep Links (Commands)
+### 7.1 Using TabDeepLinkMixin (Recommended)
+Simplify tab logic by using the mixin:
+```dart
+class _TabScreenState extends State<TabScreen> with TabDeepLinkMixin {
+  int _selectedIndex = 0;
+  
+  @override
+  int get currentTabIndex => _selectedIndex;
+
+  @override
+  void onTabChanged(int index) => setState(() => _selectedIndex = index);
+
+  @override
+  int mapRouteToTabIndex(String? tabRoute) => switch (tabRoute) {
+    'search' => 1,
+    'profile' => 2,
+    _ => 0
+  };
+  
+  @override
+  Widget build(BuildContext context) => Scaffold(...);
+}
+```
+
+## 8. Deep Link Guards
+Guards allow you to check conditions (like authentication) before navigating.
+
+1. Implement `DeepLinkGuard`:
+```dart
+class AuthGuard extends DeepLinkGuard {
+  @override
+  FutureOr<GuardResult> canNavigate(BuildContext context, DeepLinkRequest request) {
+    if (isLoggedIn) return const GuardResult.allow();
+    return const GuardResult.redirect('login');
+  }
+}
+```
+
+2. Register in `RouteConfig`:
+```dart
+'profile': RouteConfig(
+  widgetRegister: (query) => const ProfileScreen(),
+  guards: [AuthGuard()],
+),
+```
+
+## 9. Typed Query Parsing
+Safely extract parameters from the query map:
+```dart
+'detail': RouteConfig(widgetRegister: (query) {
+  final id = query.getInt('id'); // Safe int parse
+  final showInfo = query.getBool('showInfo'); // Safe bool parse
+  return DetailScreen(id: id);
+}),
+```
+Available methods: `getInt`, `getDouble`, `getBool`, `getEnum`, `getList`.
+
+## 10. Fallback & Error Handling
+Catch unknown routes or errors in `DeepLinkHandler.init`:
+```dart
+DeepLinkHandler().init(
+  context,
+  onUnknownRoute: (uri) => Navigator.pushNamed(context, 'not_found'),
+  onError: (error, stack) => print('Deep link error: $error'),
+);
+```
+
+## 11. Test Deep Links (Commands)
 Android:
 ```bash
 adb shell am start -W -a android.intent.action.VIEW -d "example.vn://detail_screen" com.example.example
