@@ -1,3 +1,11 @@
+## 3.2.0
+- **NEW**: Added `DeepLinkGuard` system for navigation interception (Auth, logging, etc.).
+- **NEW**: Added `TabDeepLinkMixin` to simplify tab-based navigation setup.
+- **NEW**: Added `QueryParametersX` extension for safe, typed parameter parsing (`getInt`, `getBool`, etc.).
+- **NEW**: Added `onUnknownRoute` and `onError` callbacks to `DeepLinkHandler.init`.
+- **IMPROVED**: `DeepLinkProcessor` now handles guards and redirects.
+- **DOCS**: Added `MIGRATION_GUIDE.md` and updated `README.md`.
+
 ## 3.1.2+1
 - Update example app with better tab navigation.
 - Update UI for README.md.
