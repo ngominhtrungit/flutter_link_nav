@@ -32,52 +32,36 @@ class TabScreen extends StatefulWidget {
   State<TabScreen> createState() => _TabScreenState();
 }
 
-class _TabScreenState extends State<TabScreen> {
+class _TabScreenState extends State<TabScreen> with TabDeepLinkMixin {
   int _selectedIndexBottomNav = 0;
   List<BottomNavItemData>? _bottomNavItems;
 
   final List<Widget> _pages = [
-    Center(child: Text('home page')),
-    SearchPage(),
-    ProfileScreen(),
+    const Center(child: Text('home page')),
+    const SearchPage(),
+    const ProfileScreen(),
   ];
 
-  // Make this method public so extension can access it
-  int getTabIndexBottomNavFromRoute(String? tabRoute) {
-    const routeMap = {SearchPage.routeName: 1, ProfileScreen.routeName: 2};
-    return routeMap[tabRoute] ?? 0;
-  }
+  @override
+  int get currentTabIndex => _selectedIndexBottomNav;
 
-  // Make getter public so extension can access current tab index
-  int get selectedIndexBottomNav => _selectedIndexBottomNav;
-
-  // Make setter public so extension can update tab index
-  void updateTabIndex(int newIndex) {
+  @override
+  void onTabChanged(int index) {
     setState(() {
-      _selectedIndexBottomNav = newIndex;
+      _selectedIndexBottomNav = index;
     });
   }
 
   @override
-  void initState() {
-    super.initState();
+  int mapRouteToTabIndex(String? tabRoute) {
+    const routeMap = {SearchPage.routeName: 1, ProfileScreen.routeName: 2};
+    return routeMap[tabRoute] ?? 0;
+  }
 
-    _selectedIndexBottomNav = getTabIndexBottomNavFromRoute(widget.route);
-    DeepLinkHandler().init(
-      context,
-      customHandler: (context, uri) => context.handleNavigationOnTab(
-        uri,
-        config: TabNavigationConfig(
-          getTabIndex: getTabIndexBottomNavFromRoute,
-          currentTabIndex: _selectedIndexBottomNav,
-          updateTabIndex: (newIndex) {
-            setState(() {
-              _selectedIndexBottomNav = newIndex;
-            });
-          },
-        ),
-      ),
-    );
+  @override
+  void initState() {
+    _selectedIndexBottomNav = mapRouteToTabIndex(widget.route);
+    super.initState();
 
     _bottomNavItems = <BottomNavItemData>[
       BottomNavItemData(icon: Icons.book_outlined, label: 'Home'),

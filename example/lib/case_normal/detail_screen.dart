@@ -5,7 +5,9 @@ import 'main_screen.dart';
 class DetailScreen extends StatelessWidget {
   static const String routeName = 'detail_screen';
 
-  const DetailScreen({super.key});
+  final int id;
+
+  const DetailScreen({super.key, this.id = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +15,18 @@ class DetailScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Detail Screen')),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('This is a detail screen.', style: TextStyle(fontSize: 24)),
-
+            const Text(
+              'This is a detail screen.',
+              style: TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Item ID: $id',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 Navigator.popUntil(
@@ -23,7 +34,7 @@ class DetailScreen extends StatelessWidget {
                   (ModalRoute.withName(MainScreen.routeName)),
                 );
               },
-              child: Text('Go Back'),
+              child: const Text('Go Back'),
             ),
           ],
         ),

@@ -7,12 +7,12 @@ import 'deep_link_request.dart';
 /// can be override to custom process deep link
 ///
 abstract class DeepLinkProcessor {
-  void processDeepLink(BuildContext context, Uri uri);
+  Future<void> processDeepLink(BuildContext context, Uri uri);
 }
 
 class DefaultDeepLinkProcessor implements DeepLinkProcessor {
   @override
-  void processDeepLink(BuildContext context, Uri uri) async {
+  Future<void> processDeepLink(BuildContext context, Uri uri) async {
     try {
       final parseResult = uri.parseUri();
       final deeplink = parseResult.deeplink;
@@ -49,7 +49,7 @@ class DefaultDeepLinkProcessor implements DeepLinkProcessor {
               );
               // Recursively process redirect
               if (context.mounted) {
-                processDeepLink(context, redirectUri);
+                await processDeepLink(context, redirectUri);
               }
             }
             return;
@@ -66,7 +66,7 @@ class DefaultDeepLinkProcessor implements DeepLinkProcessor {
           arguments: parameters,
         );
       } else if (routeConfig.actionRegister != null) {
-        routeConfig.actionRegister!.call(parameters);
+        await routeConfig.actionRegister!.call(parameters);
       } else {
         DeepLinkHandler().triggerUnknownRoute(uri);
       }

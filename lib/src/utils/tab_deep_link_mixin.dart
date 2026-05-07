@@ -21,7 +21,7 @@ mixin TabDeepLinkMixin<T extends StatefulWidget> on State<T> {
     // Automatically initialize deep link handling for this tab screen
     DeepLinkHandler().init(
       context,
-      customHandler: (ctx, uri) => ctx.handleNavigationOnTab(
+      customHandler: (ctx, uri) async => await ctx.handleNavigationOnTab(
         uri,
         config: TabNavigationConfig(
           getTabIndex: mapRouteToTabIndex,

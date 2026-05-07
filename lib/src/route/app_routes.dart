@@ -45,6 +45,7 @@ abstract class AppRoutes {
         RouteConfig(
           widgetRegister: config.widgetRegister,
           actionRegister: config.actionRegister,
+          guards: config.guards,
         ),
       );
     });

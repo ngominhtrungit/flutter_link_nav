@@ -6,6 +6,25 @@ import 'case_normal/detail_screen.dart';
 import 'case_normal/main.dart';
 import 'case_normal/main_screen.dart';
 
+class SimpleAuthGuard extends DeepLinkGuard {
+  @override
+  GuardResult canNavigate(BuildContext context, DeepLinkRequest request) {
+    final isLoggedIn = request.queryParameters.getBool(
+      'login',
+      defaultValue: false,
+    );
+    if (isLoggedIn) {
+      debugPrint('User is logged in');
+      return const GuardResult.allow();
+    }
+    debugPrint('User is not logged in - Blocking access');
+    return const GuardResult.redirect(
+      'warning',
+      params: {'msg': 'Access Denied: Please login to view this content!'},
+    );
+  }
+}
+
 class ExampleAppRoutes extends AppRoutes {
   static const String mainScreen = MainScreen.routeName;
   static const String detailScreen = DetailScreen.routeName;
@@ -18,8 +37,23 @@ class ExampleAppRoutes extends AppRoutes {
     mainScreen: RouteConfig(
       widgetRegister: (queryParams) => const MainScreen(),
     ),
-    '$mainScreen/$detailScreen': RouteConfig(
-      widgetRegister: (queryParams) => const DetailScreen(),
+    detailScreen: RouteConfig(
+      widgetRegister: (query) {
+        final id = query.toParams.getInt('id') ?? 0;
+        return DetailScreen(id: id);
+      },
+    ),
+    'warning': RouteConfig(
+      actionRegister: (query) {
+        final message = query.toParams['msg'] ?? 'Access denied';
+        ScaffoldMessenger.of(globalNavigatorKey.currentContext!).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Colors.orange,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      },
     ),
     'sheet': RouteConfig(
       actionRegister: (query) async {
@@ -27,7 +61,7 @@ class ExampleAppRoutes extends AppRoutes {
           context: globalNavigatorKey.currentContext!,
           builder: (context) => AlertDialog(
             title: const Text('Deep Link Detected'),
-            content: Text(query['label'] ?? ''),
+            content: Text(query.toParams['label'] ?? 'No label'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -40,10 +74,11 @@ class ExampleAppRoutes extends AppRoutes {
     ),
     tabScreen: RouteConfig(
       widgetRegister: (queryParams) =>
-          TabScreen(route: queryParams != null ? queryParams['tab'] : null),
+          TabScreen(route: queryParams.toParams['tab']),
     ),
     another: RouteConfig(
       widgetRegister: (queryParams) => const AnotherScreen(),
+      guards: [SimpleAuthGuard()],
     ),
   };
 

@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import '../route/app_routes.dart';
-import 'uri_ext.dart';
+import 'package:flutter_link_nav/flutter_link_nav.dart';
 
 /// Configuration class for tab navigation handling
 class TabNavigationConfig {
@@ -27,10 +28,10 @@ extension NavigationExtension on BuildContext {
   /// - [uri]: The deep link URI to process
   /// - [config]: Tab navigation configuration (optional for tab-based navigation)
   /// Returns [bool] indicating if the navigation was handled as a tab switch
-  bool handleNavigationOnTab(
+  Future<bool> handleNavigationOnTab(
     Uri uri, {
     TabNavigationConfig? config,
-  }) {
+  }) async {
     final currentRoute = ModalRoute.of(this)?.settings.name;
 
     // Use the unified parseUri from uri_ext.dart
@@ -62,6 +63,46 @@ extension NavigationExtension on BuildContext {
       if (isTabBasedRoute && isCurrentTabBasedRoute && path == currentRoute) {
         if (uri.queryParameters.containsKey('tab')) {
           final tabRoute = uri.queryParameters['tab'];
+
+          // NEW: Check guards for the tab route
+          if (tabRoute != null && tabRoute.isNotEmpty) {
+            final tabConfig = RouteRegistry.getRouteConfig(tabRoute);
+            debugPrint('Checking guards for tab route: $tabRoute, found config: ${tabConfig != null}');
+            if (tabConfig?.guards != null && tabConfig!.guards!.isNotEmpty) {
+              debugPrint('Found ${tabConfig.guards!.length} guards for tab: $tabRoute');
+              final request = DeepLinkRequest(
+                uri: uri,
+                path: tabRoute,
+                queryParameters: uri.queryParameters,
+              );
+
+              for (final guard in tabConfig.guards!) {
+                debugPrint('Executing guard: ${guard.runtimeType}');
+                final result = await guard.canNavigate(this, request);
+                debugPrint('Guard result: ${result.allowed}');
+                if (!result.allowed) {
+                  if (result.redirectRoute != null) {
+                    final redirectUri = Uri(
+                      path: result.redirectRoute,
+                      queryParameters: result.redirectParams,
+                    );
+                    if (mounted) {
+                      debugPrint('Redirecting to: ${result.redirectRoute}');
+                      // Process redirect via global handler
+                      DeepLinkHandler().init(
+                          this); // Ensure init doesn't re-run, but trigger processor
+                      // Actually, we should just call processor directly or Navigator
+                      // Better: let the processor handle it by calling it again
+                      await DefaultDeepLinkProcessor()
+                          .processDeepLink(this, redirectUri);
+                    }
+                  }
+                  return true; // Handled as blocked/redirected
+                }
+              }
+            }
+          }
+
           final newTabIndex = config.getTabIndex(tabRoute);
           debugPrint(
               'Updating tab to index: $newTabIndex for route: $tabRoute in tab-based screen: $path');
