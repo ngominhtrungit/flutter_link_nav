@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_link_nav/src/src.dart';
-import 'deep_link_request.dart';
 
 ///
 /// This is class support process deep link

@@ -58,7 +58,7 @@ extension QueryParametersX on Map<String, String> {
 }
 
 extension DeepLinkObjectX on Object? {
-  /// Safely cast dynamic/Object to Map<String, String> for deep link parameter parsing.
+  /// Safely cast dynamic/Object to `Map<String, String>` for deep link parameter parsing.
   /// Returns an empty map if the object is not a Map.
   Map<String, String> get toParams {
     final self = this;

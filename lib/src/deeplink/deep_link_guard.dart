@@ -13,12 +13,6 @@ class GuardResult {
   /// Optional parameters for the redirect route
   final Map<String, String>? redirectParams;
 
-  const GuardResult._({
-    required this.allowed,
-    this.redirectRoute,
-    this.redirectParams,
-  });
-
   /// Allow the navigation to proceed
   const GuardResult.allow()
       : allowed = true,
