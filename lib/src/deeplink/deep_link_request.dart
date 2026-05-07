@@ -56,3 +56,16 @@ extension QueryParametersX on Map<String, String> {
     return val.split(separator).where((e) => e.isNotEmpty).toList();
   }
 }
+
+extension DeepLinkObjectX on Object? {
+  /// Safely cast dynamic/Object to Map<String, String> for deep link parameter parsing.
+  /// Returns an empty map if the object is not a Map.
+  Map<String, String> get toParams {
+    final self = this;
+    if (self is Map<String, String>) return self;
+    if (self is Map) {
+      return self.map((k, v) => MapEntry(k.toString(), v.toString()));
+    }
+    return const {};
+  }
+}

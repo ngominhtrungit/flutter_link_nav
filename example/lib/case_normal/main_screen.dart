@@ -16,14 +16,18 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
 
-    /// option 1: use the default deep link handler
-    DeepLinkHandler().init(context);
-
-    /// option 2: use a custom deep link handler
-    // DeepLinkHandler().init(context, customHandler: (context, uri) {
-    //   // Custom deep link handling logic can be added here
-    //   debugPrint('MainScreen Custom deep link handler: $uri');
-    // });
+    // Initialize deep link handler with fallback for unknown routes
+    DeepLinkHandler().init(
+      context,
+      onUnknownRoute: (uri) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Unknown route: ${uri.path}')));
+      },
+      onError: (e, stack) {
+        debugPrint('Deep link error: $e');
+      },
+    );
   }
 
   @override
@@ -41,7 +45,11 @@ class _MainScreenState extends State<MainScreen> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, ExampleAppRoutes.detailScreen);
+                Navigator.pushNamed(
+                  context,
+                  ExampleAppRoutes.detailScreen,
+                  arguments: {'id': 2},
+                );
               },
               child: const Text('Go to Detail Screen'),
             ),

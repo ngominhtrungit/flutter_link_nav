@@ -1,10 +1,15 @@
 ## 3.2.0
-- **NEW**: Added `DeepLinkGuard` system for navigation interception (Auth, logging, etc.).
-- **NEW**: Added `TabDeepLinkMixin` to simplify tab-based navigation setup.
-- **NEW**: Added `QueryParametersX` extension for safe, typed parameter parsing (`getInt`, `getBool`, etc.).
+- **NEW**: Added `DeepLinkGuard` system for navigation interception (Auth, redirection, etc.).
+- **NEW**: Added `TabDeepLinkMixin` to simplify tab-based navigation setup in `StatefulWidget`.
+- **NEW**: Added `DeepLinkObjectX.toParams` extension for safe casting of dynamic/Object parameters to `Map<String, String>`.
 - **NEW**: Added `onUnknownRoute` and `onError` callbacks to `DeepLinkHandler.init`.
-- **IMPROVED**: `DeepLinkProcessor` now handles guards and redirects.
-- **DOCS**: Added `MIGRATION_GUIDE.md` and updated `README.md`.
+- **IMPROVED**: `RouteAction` now supports asynchronous execution (`FutureOr<void>`).
+- **IMPROVED**: `DeepLinkHandler` now supports re-initialization with new context and updated handlers.
+- **BREAKING CHANGE**: `handleNavigationOnTab` now returns `Future<bool>` instead of `bool` to support async guards.
+- **BREAKING CHANGE**: `RouteHandler` signature updated from `dynamic` to `Object?` for better type safety.
+- **FIX**: Corrected `AppRoutes.registerRoutes` to properly register guards in the global `RouteRegistry`.
+- **TEST**: Added comprehensive unit and widget tests for the guard system and core logic.
+- **DOCS**: Added `MIGRATION_GUIDE.md` and updated `README.md` with new features.
 
 ## 3.1.2+1
 - Update example app with better tab navigation.

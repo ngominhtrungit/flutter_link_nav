@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../deeplink/deep_link_guard.dart';
 
-typedef RouteHandler<T> = T Function(dynamic queryParams);
+typedef RouteHandler<T> = T Function(Object? queryParams);
 
 typedef RouteWidget = RouteHandler<Widget?>;
-typedef RouteAction = RouteHandler<void>;
+typedef RouteAction = RouteHandler<FutureOr<void>>;
 
 class RouteConfig {
   final RouteWidget? widgetRegister;

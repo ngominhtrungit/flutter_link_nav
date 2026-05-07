@@ -1,6 +1,6 @@
-# Migration Guide: Phase 1 (v3.1.0)
+# Migration Guide: Core Update (v3.2.0)
 
-Phase 1 introduces several enhancements to `flutter_link_nav` for better safety, security, and developer experience. This guide helps you migrate your existing code to the new APIs.
+Version 3.2.0 introduces several enhancements to `flutter_link_nav` for better safety, security, and developer experience. This guide helps you migrate your existing code to the new APIs.
 
 ## 1. Guard System
 If you want to intercept navigation (e.g., for authentication), you can now add guards to your `RouteConfig`.
@@ -86,4 +86,21 @@ DeepLinkHandler().init(
     // Log error
   },
 );
+```
+
+## 5. Safe Parameter Parsing
+`RouteHandler` parameters are now `Object?`. Use `.toParams` to safely convert them.
+
+**Old:**
+```dart
+widgetRegister: (query) {
+  final id = query['id']; // Assumes query is Map
+}
+```
+
+**New:**
+```dart
+widgetRegister: (query) {
+  final id = query.toParams['id']; // Safe and works with any Object type
+}
 ```
