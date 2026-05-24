@@ -76,6 +76,10 @@ class ExampleAppRoutes extends AppRoutes {
       widgetRegister: (queryParams) =>
           TabScreen(route: queryParams.toParams['tab']),
     ),
+    AdvancedTabScreen.routeName: RouteConfig(
+      widgetRegister: (queryParams) =>
+          AdvancedTabScreen(route: queryParams.toParams['tab']),
+    ),
     another: RouteConfig(
       widgetRegister: (queryParams) => const AnotherScreen(),
       guards: [SimpleAuthGuard()],
@@ -83,5 +87,5 @@ class ExampleAppRoutes extends AppRoutes {
   };
 
   @override
-  Set<String>? get tabBasedRoutes => {tabScreen};
+  Set<String>? get tabBasedRoutes => {tabScreen, AdvancedTabScreen.routeName};
 }

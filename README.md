@@ -317,9 +317,9 @@ flutter run -t example/lib/case_multiple_tab_screen/tab_screen.dart -d macos
 - For debugging: add `debugPrint(uri.toString());` in custom handler.
 
 ### Next Ideas (Contributions Welcome)
-- Add web platform support.
-- Add guard/middleware before navigation.
-- Provide a built-in tab mapping helper.
+- Add path parameters support (e.g. /user/:id).
+- Provide more built-in navigation observers.
+- Support for auto-generating routes via code-gen.
 
 Enjoy building with deep links 🚀
 
