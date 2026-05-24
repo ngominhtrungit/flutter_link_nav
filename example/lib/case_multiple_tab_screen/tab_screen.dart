@@ -21,18 +21,75 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class TabScreen extends StatefulWidget {
+/// Example of Simple Case using [TabDeepLinkBuilder]
+class TabScreen extends StatelessWidget {
   static const String routeName = 'main';
 
+  final String? route;
+
   const TabScreen({super.key, this.route});
+
+  @override
+  Widget build(BuildContext context) {
+    return TabDeepLinkBuilder(
+      initialRoute: route,
+      routeToIndexMap: const {
+        SearchPage.routeName: 1,
+        ProfileScreen.routeName: 2,
+      },
+      builder: (context, currentIndex, onTabChanged) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Simple Tab Screen'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, AdvancedTabScreen.routeName);
+                },
+                icon: const Icon(Icons.settings),
+                tooltip: 'Go to Advanced Case',
+              )
+            ],
+          ),
+          body: IndexedStack(
+            index: currentIndex,
+            children: const [
+              Center(child: Text('home page')),
+              SearchPage(),
+              ProfileScreen(),
+            ],
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: currentIndex,
+            onTap: onTabChanged,
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Colors.blue,
+            unselectedItemColor: Colors.grey,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+              BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Example of Advanced Case using [TabDeepLinkMixin]
+class AdvancedTabScreen extends StatefulWidget {
+  static const String routeName = 'main_advanced';
+
+  const AdvancedTabScreen({super.key, this.route});
 
   final String? route;
 
   @override
-  State<TabScreen> createState() => _TabScreenState();
+  State<AdvancedTabScreen> createState() => _AdvancedTabScreenState();
 }
 
-class _TabScreenState extends State<TabScreen> with TabDeepLinkMixin {
+class _AdvancedTabScreenState extends State<AdvancedTabScreen> with TabDeepLinkMixin {
   int _selectedIndexBottomNav = 0;
   List<BottomNavItemData>? _bottomNavItems;
 
@@ -77,6 +134,7 @@ class _TabScreenState extends State<TabScreen> with TabDeepLinkMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Advanced Tab Screen')),
       body: IndexedStack(index: _selectedIndexBottomNav, children: _pages),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
