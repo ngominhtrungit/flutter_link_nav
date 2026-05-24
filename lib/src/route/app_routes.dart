@@ -59,9 +59,20 @@ abstract class AppRoutes {
     String routeName, {
     dynamic arguments,
   }) async {
-    final routeConfig = RouteRegistry.getRouteConfig(routeName);
-    if (routeConfig?.actionRegister != null) {
-      return routeConfig!.actionRegister!.call(arguments);
+    final routeMatch = RouteRegistry.matchRoute(routeName);
+    if (routeMatch?.config.actionRegister != null) {
+      dynamic finalArguments = arguments;
+      if (routeMatch!.pathParams.isNotEmpty) {
+        if (finalArguments is Map) {
+          finalArguments = <dynamic, dynamic>{
+            ...finalArguments,
+            ...routeMatch.pathParams,
+          };
+        } else if (finalArguments == null) {
+          finalArguments = routeMatch.pathParams;
+        }
+      }
+      return routeMatch.config.actionRegister!.call(finalArguments);
     }
     debugPrint('Route "$routeName" has no actionRegister.');
     return;
@@ -76,11 +87,15 @@ abstract class AppRoutes {
   /// AppRoutes.executeRouteAction('routeName', arguments: {...});
   ///
   static Route<dynamic>? generateRoute(RouteSettings settings) {
-    final routeConfig = RouteRegistry.getRouteConfig(settings.name!);
+    if (settings.name == null) return null;
+    
+    final routeMatch = RouteRegistry.matchRoute(settings.name!);
 
-    if (routeConfig == null) {
+    if (routeMatch == null) {
       return null;
     }
+
+    final routeConfig = routeMatch.config;
 
     if (routeConfig.widgetRegister == null) {
       debugPrint(
@@ -88,9 +103,21 @@ abstract class AppRoutes {
       return null;
     }
 
-    routeConfig.actionRegister?.call(settings.arguments);
+    dynamic finalArguments = settings.arguments;
+    if (routeMatch.pathParams.isNotEmpty) {
+      if (finalArguments is Map) {
+        finalArguments = <dynamic, dynamic>{
+          ...finalArguments,
+          ...routeMatch.pathParams,
+        };
+      } else if (finalArguments == null) {
+        finalArguments = routeMatch.pathParams;
+      }
+    }
 
-    final widgetDetected = routeConfig.widgetRegister!.call(settings.arguments);
+    routeConfig.actionRegister?.call(finalArguments);
+
+    final widgetDetected = routeConfig.widgetRegister!.call(finalArguments);
 
     if (widgetDetected != null) {
       return MaterialPageRoute(

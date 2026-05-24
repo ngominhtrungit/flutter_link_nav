@@ -22,18 +22,26 @@ class DefaultDeepLinkProcessor implements DeepLinkProcessor {
         return;
       }
 
-      final routeConfig = RouteRegistry.getRouteConfig(deeplink);
+      final routeMatch = RouteRegistry.matchRoute(deeplink);
 
-      if (routeConfig == null) {
+      if (routeMatch == null) {
         debugPrint('No route found for deeplink: $deeplink');
         DeepLinkHandler().triggerUnknownRoute(uri);
         return;
       }
 
+      final routeConfig = routeMatch.config;
+      
+      // Merge pathParams and queryParameters
+      final mergedParameters = <String, String>{
+        if (parameters != null) ...parameters,
+        ...routeMatch.pathParams,
+      };
+
       final request = DeepLinkRequest(
         uri: uri,
-        path: deeplink,
-        queryParameters: parameters,
+        path: routeMatch.matchedRouteName,
+        queryParameters: mergedParameters,
       );
 
       // Check guards
@@ -61,11 +69,11 @@ class DefaultDeepLinkProcessor implements DeepLinkProcessor {
       if (routeConfig.widgetRegister != null) {
         Navigator.pushNamed(
           context,
-          deeplink,
-          arguments: parameters,
+          routeMatch.matchedRouteName,
+          arguments: mergedParameters,
         );
       } else if (routeConfig.actionRegister != null) {
-        await routeConfig.actionRegister!.call(parameters);
+        await routeConfig.actionRegister!.call(mergedParameters);
       } else {
         DeepLinkHandler().triggerUnknownRoute(uri);
       }

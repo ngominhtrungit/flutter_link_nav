@@ -11,17 +11,15 @@ extension UriParser on Uri {
     }
 
     if (host.isNotEmpty) {
-      // Check if the host is a registered route
-      // If host is a route (e.g., main_screen), then path will be host + remaining path
-      // If host is a domain (e.g., example.vn), and path contains the route, we might ignore the host
-      
-      if (RouteRegistry.getRouteConfig(host) != null) {
-        fullPath = host;
-        if (normalizedPath.isNotEmpty) {
-          fullPath = '$fullPath/$normalizedPath';
-        }
+      String pathWithHost = host;
+      if (normalizedPath.isNotEmpty) {
+        pathWithHost = '$host/$normalizedPath';
+      }
+
+      if (RouteRegistry.matchRoute(pathWithHost) != null) {
+        fullPath = pathWithHost;
       } else {
-        // If host is not a route, treat it as a domain and only use the path
+        // If host+path is not a route, treat host as a domain and only use the path
         fullPath = normalizedPath;
       }
     } else {
