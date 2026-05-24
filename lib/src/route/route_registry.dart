@@ -19,6 +19,14 @@ class RouteConfig {
   });
 }
 
+class RouteMatch {
+  final RouteConfig config;
+  final String matchedRouteName;
+  final Map<String, String> pathParams;
+
+  RouteMatch(this.config, this.matchedRouteName, this.pathParams);
+}
+
 class RouteRegistry {
   static final Map<String, RouteConfig> _routes = {};
 
@@ -35,16 +43,48 @@ class RouteRegistry {
     _routes[route] = config;
   }
 
+  /// Match a path against registered routes, supporting path parameters like /user/:id
+  static RouteMatch? matchRoute(String path) {
+    // 1. Check for exact match first
+    if (_routes.containsKey(path)) {
+      return RouteMatch(_routes[path]!, path, {});
+    }
+
+    // 2. Iterate through routes to find pattern match
+    final pathSegments = path.split('/').where((s) => s.isNotEmpty).toList();
+
+    for (final entry in _routes.entries) {
+      final routePattern = entry.key;
+      final routeSegments = routePattern.split('/').where((s) => s.isNotEmpty).toList();
+
+      if (pathSegments.length == routeSegments.length) {
+        bool isMatch = true;
+        final Map<String, String> extractedParams = {};
+
+        for (int i = 0; i < routeSegments.length; i++) {
+          final rSeg = routeSegments[i];
+          final pSeg = pathSegments[i];
+
+          if (rSeg.startsWith(':')) {
+            final paramName = rSeg.substring(1);
+            extractedParams[paramName] = pSeg;
+          } else if (rSeg != pSeg) {
+            isMatch = false;
+            break;
+          }
+        }
+
+        if (isMatch) {
+          return RouteMatch(entry.value, routePattern, extractedParams);
+        }
+      }
+    }
+
+    return null;
+  }
+
   ///
-  /// Get route configuration for a specific route
-  ///
-  /// example:
-  ///
-  /// RouteRegistry.getRouteConfig('home') => return [HomeScreen] had registered before
-  ///
-  /// or show bottom sheet
-  ///
-  /// RouteRegistry.getRouteConfig('showBottomSheet') => return action to show bottom sheet
+  /// Get route configuration for a specific route (exact match only)
   ///
   static RouteConfig? getRouteConfig(String route) {
     return _routes[route];

@@ -63,6 +63,12 @@ class _MainScreenState extends State<MainScreen> {
               },
               child: const Text('Show Sheet (Action)'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, 'user/999');
+              },
+              child: const Text('Go to User Profile (Path Param: 999)'),
+            ),
           ],
         ),
       ),

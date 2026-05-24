@@ -43,6 +43,12 @@ class ExampleAppRoutes extends AppRoutes {
         return DetailScreen(id: id);
       },
     ),
+    'user/:id': RouteConfig(
+      widgetRegister: (query) {
+        final id = query.toParams.getInt('id') ?? 0;
+        return DetailScreen(id: id);
+      },
+    ),
     'warning': RouteConfig(
       actionRegister: (query) {
         final message = query.toParams['msg'] ?? 'Access denied';
