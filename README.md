@@ -21,9 +21,16 @@
 5. Registering Routes
 6. Case 1: Single Screen Navigation
 7. Case 2: Tab Navigation (Multiple Tabs)
-8. Test Deep Links (Commands)
-9. Run Examples Locally
-10. Changelog & License
+8. Deep Link Guards
+9. Typed Query Parsing
+10. Path Parameters Support
+    - Smart PopUntil Support (`AppRoutes.withName`)
+    - Backward Compatibility / Migration
+11. Fallback & Error Handling
+12. Test Deep Links (Commands)
+13. Run Examples Locally
+14. Running Unit Tests
+15. Changelog & License
 
 ---
 ## 1. Overview
@@ -264,7 +271,49 @@ Safely extract parameters from the query map:
 ```
 Available methods: `getInt`, `getDouble`, `getBool`, `getEnum`, `getList`.
 
-## 10. Fallback & Error Handling
+## 10. Path Parameters Support
+You can define dynamic segments in your route paths using `:` (e.g., `user/:id`).
+The framework will automatically extract these parameters and merge them into the `query` object for seamless access.
+
+```dart
+'user/:id': RouteConfig(widgetRegister: (query) {
+  // Can be accessed just like query parameters
+  final id = query.getInt('id'); 
+  return DetailScreen(id: id ?? 0);
+}),
+```
+
+### Smart PopUntil Support (`AppRoutes.withName`)
+When your navigation stack contains dynamic route instances (such as `'detail_screen/999'`), using standard Flutter `ModalRoute.withName('detail_screen')` in `Navigator.popUntil` will fail. This is because the names are compared literally (`'detail_screen/999'` does not equal `'detail_screen'`).
+
+`flutter_link_nav` solves this via `AppRoutes.withName(routePattern)`. It checks the route pattern register to map actual route paths in the navigation history back to their registered template:
+
+```dart
+// Intelligently matches and pops back to 'detail_screen/999' or any other ID
+Navigator.popUntil(
+  context,
+  AppRoutes.withName('detail_screen/:id'),
+);
+```
+See the complete implementation in [settings_screen.dart](file:///Users/trung.ngo/code/pubdev/flutter_link_nav/example/lib/case_normal/settings_screen.dart) for a live demonstration.
+
+### Backward Compatibility / Migration
+If you are migrating an existing route from query parameters to path parameters (e.g., `example.vn://detail?id=10` to `example.vn://detail/10`), you can register an alias to support both links without breaking older app versions that might still generate or use the old link format:
+
+```dart
+final detailHandler = RouteConfig(widgetRegister: (query) {
+  final id = query.getInt('id');
+  return DetailScreen(id: id ?? 0);
+});
+
+@override
+Map<String, RouteConfig> get routes => {
+  'detail': detailHandler,       // Supports old links: example.vn://detail?id=10
+  'detail/:id': detailHandler,   // Supports new links: example.vn://detail/10
+};
+```
+
+## 11. Fallback & Error Handling
 Catch unknown routes or errors in `DeepLinkHandler.init`:
 ```dart
 DeepLinkHandler().init(
@@ -274,7 +323,7 @@ DeepLinkHandler().init(
 );
 ```
 
-## 11. Test Deep Links (Commands)
+## 12. Test Deep Links (Commands)
 Android:
 ```bash
 adb shell am start -W -a android.intent.action.VIEW -d "example.vn://detail_screen" com.example.example
@@ -292,7 +341,7 @@ open "example.vn://main?tab=search"
 ```
 Replace `DEVICE_ID` via `flutter devices` or `xcrun simctl list`.
 
-## 9. Run Examples Locally
+## 13. Run Examples Locally
 Case 1 (Single Screen):
 ```bash
 flutter run -t example/lib/case_normal/main.dart -d android
@@ -306,18 +355,31 @@ flutter run -t example/lib/case_multiple_tab_screen/tab_screen.dart -d ios
 flutter run -t example/lib/case_multiple_tab_screen/tab_screen.dart -d macos
 ```
 
-## 10. Changelog & License
+## 14. Running Unit Tests
+We provide comprehensive unit tests covering pattern matching, parameter parsing, and smart route predicates. 
+
+To execute the unit tests, run:
+```bash
+flutter test
+```
+The test suite in [app_routes_test.dart](file:///Users/trung.ngo/code/pubdev/flutter_link_nav/test/app_routes_test.dart) verifies:
+- Exact route name matching.
+- Null-safety & mismatch handling.
+- Smart path parameter matching (e.g. pattern `detail/:id` matching actual stack route `detail/999`).
+- Complex multi-parameter routing (e.g. pattern `course/:courseId/lesson/:lessonId` matching `course/flutter/lesson/1`).
+
+## 15. Changelog & License
 - See `CHANGELOG.md` for version history.
 - Licensed under the terms in `LICENSE`.
 
 ---
 ### Tips
+- Use `AppRoutes.withName(routeName)` instead of `ModalRoute.withName(routeName)` for `Navigator.popUntil` if your routes use path parameters (e.g., `/user/:id`).
 - Use `AppRoutes.executeRouteAction('sheet', arguments: {...});` for non-navigation actions.
 - Avoid pushing the same route without params; handler already skips.
 - For debugging: add `debugPrint(uri.toString());` in custom handler.
 
 ### Next Ideas (Contributions Welcome)
-- Add path parameters support (e.g. /user/:id).
 - Provide more built-in navigation observers.
 - Support for auto-generating routes via code-gen.
 

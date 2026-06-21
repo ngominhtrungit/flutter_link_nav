@@ -65,9 +65,15 @@ class _MainScreenState extends State<MainScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, 'user/999');
+                Navigator.pushNamed(context, 'detail_screen/999');
               },
               child: const Text('Go to User Profile (Path Param: 999)'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, 'detail_screen');
+              },
+              child: const Text('Go to User Profile (error)'),
             ),
           ],
         ),
