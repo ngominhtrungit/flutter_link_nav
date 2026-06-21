@@ -5,6 +5,7 @@ import 'package:flutter_link_nav/flutter_link_nav.dart';
 import 'case_normal/detail_screen.dart';
 import 'case_normal/main.dart';
 import 'case_normal/main_screen.dart';
+import 'case_normal/settings_screen.dart';
 
 class SimpleAuthGuard extends DeepLinkGuard {
   @override
@@ -43,10 +44,16 @@ class ExampleAppRoutes extends AppRoutes {
         return DetailScreen(id: id);
       },
     ),
-    'user/:id': RouteConfig(
+    '$detailScreen/:id': RouteConfig(
       widgetRegister: (query) {
         final id = query.toParams.getInt('id') ?? 0;
         return DetailScreen(id: id);
+      },
+    ),
+    '$detailScreen/:id/settings': RouteConfig(
+      widgetRegister: (query) {
+        final id = query.toParams.getInt('id') ?? 0;
+        return SettingsScreen(userId: id);
       },
     ),
     'warning': RouteConfig(
