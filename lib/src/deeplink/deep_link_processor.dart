@@ -34,7 +34,7 @@ class DefaultDeepLinkProcessor implements DeepLinkProcessor {
       
       // Merge pathParams and queryParameters
       final mergedParameters = <String, String>{
-        if (parameters != null) ...parameters,
+        ...parameters,
         ...routeMatch.pathParams,
       };
 

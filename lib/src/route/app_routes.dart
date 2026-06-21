@@ -86,8 +86,8 @@ abstract class AppRoutes {
             ...finalArguments,
             ...routeMatch.pathParams,
           };
-        } else if (finalArguments == null) {
-          finalArguments = routeMatch.pathParams;
+        } else {
+          finalArguments ??= routeMatch.pathParams;
         }
       }
       return routeMatch.config.actionRegister!.call(finalArguments);
@@ -128,8 +128,8 @@ abstract class AppRoutes {
           ...finalArguments,
           ...routeMatch.pathParams,
         };
-      } else if (finalArguments == null) {
-        finalArguments = routeMatch.pathParams;
+      } else {
+        finalArguments ??= routeMatch.pathParams;
       }
     }
 
