@@ -1,3 +1,9 @@
+## 3.3.0
+- **NEW**: Added `AppRoutes.withName` smart RoutePredicate to support `Navigator.popUntil` with Path Parameters.
+- **NEW**: Added Path Parameters support (`:id`) in route matching and parameter parsing.
+- **TEST**: Added comprehensive unit tests for `AppRoutes.withName` and path parameters routing.
+- **DOCS**: Updated README with detailed Path Parameters examples and test verification guide.
+
 ## 3.2.0
 - **NEW**: Added `DeepLinkGuard` system for navigation interception (Auth, redirection, etc.).
 - **NEW**: Added `TabDeepLinkMixin` to simplify tab-based navigation setup in `StatefulWidget`.

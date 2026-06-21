@@ -13,6 +13,24 @@ abstract class AppRoutes {
     _instance = appRoutes;
   }
 
+  /// 
+  /// A smarter alternative to [ModalRoute.withName] that supports Path Parameters.
+  /// Use this with [Navigator.popUntil] to correctly match routes with dynamic segments.
+  /// 
+  static RoutePredicate withName(String routeName) {
+    return (Route<dynamic> route) {
+      final currentName = route.settings.name;
+      if (currentName == null) return false;
+      
+      // 1. Exact match (same as ModalRoute.withName)
+      if (currentName == routeName) return true;
+      
+      // 2. Smart match for Path Parameters
+      final match = RouteRegistry.matchRoute(currentName);
+      return match?.matchedRouteName == routeName;
+    };
+  }
+
   ///
   /// This place contains all the routes used in the application.
   ///
@@ -68,8 +86,8 @@ abstract class AppRoutes {
             ...finalArguments,
             ...routeMatch.pathParams,
           };
-        } else if (finalArguments == null) {
-          finalArguments = routeMatch.pathParams;
+        } else {
+          finalArguments ??= routeMatch.pathParams;
         }
       }
       return routeMatch.config.actionRegister!.call(finalArguments);
@@ -110,8 +128,8 @@ abstract class AppRoutes {
           ...finalArguments,
           ...routeMatch.pathParams,
         };
-      } else if (finalArguments == null) {
-        finalArguments = routeMatch.pathParams;
+      } else {
+        finalArguments ??= routeMatch.pathParams;
       }
     }
 

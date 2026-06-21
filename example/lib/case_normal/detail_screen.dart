@@ -29,6 +29,13 @@ class DetailScreen extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
+                Navigator.pushNamed(context, 'detail_screen/$id/settings');
+              },
+              child: const Text('Go to User Settings'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
                 Navigator.popUntil(
                   context,
                   (ModalRoute.withName(MainScreen.routeName)),
